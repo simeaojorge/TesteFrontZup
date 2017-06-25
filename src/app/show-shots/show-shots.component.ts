@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RequestsService } from '../requests.service';
+import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
+import { ParamentrosService } from '../parametros.service';
 
 @Component({
   selector: 'app-show-shots',
@@ -8,14 +10,19 @@ import { RequestsService } from '../requests.service';
 })
 export class ShowShotsComponent implements OnInit {
 
-  constructor(private request: RequestsService) { }
+  constructor(private request: RequestsService, private params: ParamentrosService) {
+  }
 
   private pagina:number = 1;
   private perPage: number = 20;
   private shotList: Array<Object> = [];
-  public tamanho = 'normal';
+  
+  private shot;
+  private mouseOverShot: number|string = ""; 
   
   private pesquisa: string = "";
+  
+  @ViewChild('modalShot') modal: ModalComponent;
   
   ngOnInit() {
       this.loadShots();
@@ -24,7 +31,9 @@ export class ShowShotsComponent implements OnInit {
   loadShots(){
       let self = this;
       
-      this.request.enviar("shots?page="+this.pagina+"&per_page="+this.perPage)
+      let dados = this.getParametros();
+      
+      this.request.enviar("shots?page="+this.pagina+"&per_page="+this.perPage+dados)
       .subscribe(
               function(retorno){
                   self.shotList = self.shotList.concat(retorno);
@@ -32,14 +41,51 @@ export class ShowShotsComponent implements OnInit {
       );
   }
   
+  getDescription(shot){
+      let description = "";
+      if(shot.description)
+          description = (shot.description.length > 600) ? shot.description.substring(0, 600)+'(...)' : shot.description;
+      return description;
+  }
+  
   scroll(){
       this.pagina++;
       this.loadShots();
   }
   
-  alteraTamanho(tamanho){
-      
-      this.tamanho = (tamanho == 1)? "teaser" : (tamanho == 2) ? "normal" : "hidpi";
+  mostraInfo(shot){
+      this.mouseOverShot = shot.id;
   }
-
+  
+  showShot(id){
+      this.request.enviar('shots/'+id)
+      .subscribe(
+              retorno => {
+                  this.shot = retorno; 
+                  this.modal.open('lg');
+              }
+      );
+  }
+  
+  getTamanho(){
+      return this.params.getTamanho();
+  }
+  
+  getParametros(){
+      
+      let retorno = "";
+      
+      let list = this.params.getList();
+      let time = this.params.getTimeframe();
+      let order = this.params.getSort();
+      
+      if(list != "")
+          retorno += "&list="+list;
+      if(time != "")
+          retorno += "&timeframe="+time;
+      if(order != "")
+          retorno += "&sort="+order;
+      
+      return retorno;
+  }
 }

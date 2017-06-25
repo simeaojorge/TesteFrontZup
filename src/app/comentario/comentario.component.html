@@ -1,0 +1,11 @@
+<div class="flex-container" *ngIf="comments">
+	<hr class="flex-item">
+	<span class="h3 flex-item">{{comments.length}} coment&aacute;rios</span>
+	
+	<div *ngFor="let comentario of comments;" class="flex-item">
+		<hr>
+		<img srcset="{{comentario.user.avatar_url}}" class="avatarComentario">
+		<span [innerHTML]="comentario.body" class="comentarioTexto"></span>
+		<span class="horarioPost">Postado em {{comentario.created_at | data}}</span>
+	</div>
+</div>

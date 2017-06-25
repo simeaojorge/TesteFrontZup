@@ -6,14 +6,20 @@ import { Injectable } from '@angular/core';
 export class RequestsService {
 
     private url: string = "";
-    private dados: Object;
+    private dados: string = "";
     private tipo: string;
-    
-    constructor(private http: Http) { }
 
-    enviar(url: string = "", dados: Object = {}, tipo: string = "get"): Observable<any>{
-        this.url = "https://api.dribbble.com/v1/"+url;
-        this.dados = dados;
+    private access_token = "c6d6ae8f82e0f0e339ff9bac3ab4b267609ebd623f3d916942aadbf01cbcad68";
+    
+    
+    constructor(private http: Http) {
+        
+    }
+
+    enviar(url: string = "", dados: Object = {}, tipo: string = "get", concatUrl: boolean = true): Observable<any>{
+        
+        this.url = (concatUrl)? "https://api.dribbble.com/v1/"+url : url;
+        this.dados = JSON.stringify(dados);
         this.tipo = tipo;
         
         return this.selectMetodo();
@@ -34,7 +40,7 @@ export class RequestsService {
     }
     
     formatUrl(){
-        for(let data in this.dados){
+        for(let data in JSON.parse(this.dados)){
             if(this.url.indexOf("?") >= 0)
                 this.url += '&';
             else
@@ -50,33 +56,36 @@ export class RequestsService {
         else
             this.url += '?';
         
-        this.url += 'access_token=6d33037c177cb4fa5d29c94d0c066b5943e0b03cbb82776da4026103e46db4e6';
+        this.url += 'access_token='+this.access_token;
     }
     
     _get(): Observable<any>{
 
         this.formatUrl();
         this.adicionaAccessToken();
-        return this.http.get(this.url)
-                        .map(response => response.json())
-                        .catch(error => Observable.throw(error.json().error));
+        
+        let header = new Headers({ 'if-modified-since': 'Sun, 25 Jun 2000 15:45:36 GMT' });
+        
+        return this.http.get(this.url, { headers: header})
+                        .map(retorno => this.sucesso(retorno))
+                        .catch(error => this.falha(error));
     }
     
     _post(): Observable<any>{
         
         this.adicionaAccessToken();
-        this.adicionaAccessToken();
         return this.http.post(this.url, this.dados)
-                        .map(response => response.json())
-                        .catch(error => Observable.throw(error.json().error));
+                        .map(retorno => this.sucesso(retorno))
+                        .catch(error => this.falha(error));
     }
     
     _put(): Observable<any>{
         
         this.adicionaAccessToken();
+        
         return this.http.put(this.url, this.dados)
-                        .map(response => response.json())
-                        .catch(error => Observable.throw(error.json().error));
+                        .map(retorno => this.sucesso(retorno))
+                        .catch(error => this.falha(error));
     }
     
     _delete(): Observable<any>{
@@ -84,7 +93,25 @@ export class RequestsService {
         this.formatUrl();
         this.adicionaAccessToken();
         return this.http.delete(this.url)
-                        .map(response => response.json())
-                        .catch(error => Observable.throw(error.json().error));
+                        .map(retorno => this.sucesso(retorno))
+                        .catch(error => this.falha(error));
+    }
+    
+    sucesso(retorno){
+        
+        if(retorno)
+            return retorno.json();
+        else
+            return retorno;
+    }
+    
+    falha(error){
+        
+        error = (error.status == '404')? 'Página não encontrada' : error.json().error; 
+        return Observable.throw(error);
+    }
+    
+    setAccessToken(token){
+        this.access_token = token;
     }
 }

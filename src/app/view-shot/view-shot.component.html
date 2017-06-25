@@ -1,0 +1,25 @@
+<div *ngIf="shot" class="viewShot">
+
+
+	<div class="row cabecalhoShot">
+		<img class="userAvatar" srcset="{{shot.user.avatar_url}}">
+		<span class="h1 shotTitle">{{shot.title}}</span>
+	</div>
+	
+	<div class="row flex-container">
+		<div class="shotImage">
+			<img srcset="{{shot.images.normal}}">
+		</div>
+		<div class="descricao">
+			<div [innerHTML]="shot.description"></div>
+			<span (click)="likeShot()" class="like">{{shot.likes_count}} <i class="fa fa-thumbs-o-up fa-2x" [style.opacity]="opacity" [style.color]="color"></i></span>
+			<span>&nbsp;{{shot.comments_count}} <i class="fa fa-commenting-o fa-2x"></i></span>
+			<span>&nbsp;{{shot.views_count}} <i class="fa fa-eye fa-2x"></i></span>
+			<span class="autoriaShot">Feito por {{shot.user.name}} em {{shot.created_at | data}}</span>
+		</div>
+	</div>
+	
+	<app-comentario [url]="shot.comments_url"></app-comentario>
+	
+	
+</div>

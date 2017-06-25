@@ -1,0 +1,59 @@
+.bodyModal{
+	margin: 30px;
+}
+
+.shotTitle{
+	margin-left: 10px;
+}
+
+.userAvatar{
+	width: 100px;
+	height: 100px;
+	background-size: cover;
+	display: inline-block;
+	border-radius: 100px;
+	-webkit-border-radius: 100px;
+	-moz-border-radius: 100px;
+}
+
+.viewShot{
+	margin: 0 20px;
+}
+
+.cabecalhoShot{
+	text-align: center;
+}
+
+.flex-container{
+	display: -webkit-flex;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-top: 20px;
+}
+
+.shotImage{
+	box-shadow: 0px 2px 8px -1px rgba(0,0,0,0.24);
+	max-width: 90vw;
+}
+
+.shotImage img{
+	max-width: 90vw;
+}
+
+.descricao{
+	width: 400px;
+	margin-left: 50px;
+	max-width: 90vw;
+	word-break: break-word; 
+}
+
+.autoriaShot{
+	display: block;
+	color: #bfbaba;
+}
+
+.like{
+	cursor: pointer;
+}

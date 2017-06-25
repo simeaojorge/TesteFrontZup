@@ -1,1 +1,42 @@
+<nav class="navbar navbar-default navbarResponsivo">
+ <div class="container-fluid">
+
+	<div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" [routerLink]="['']"><i class="fa fa-home fa-2x"></i></a>
+    </div>
+
+    <div class="collapse navbar-collapse navbarResponsivo" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+      
+      	<ng-template ngFor let-filtro [ngForOf]="opcoesFiltroShot">
+	      	<li class="dropdown" *ngIf="filtro.filtro != 'timeframe' || (filtro.filtro == 'timeframe' && param.getSort() != 'recent')">
+	          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{getParamEscolhido(filtro.filtro)}}<span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+	            <li *ngFor="let opcoes of filtro.opcoes" class="opcoesFiltro" (click)="adicionaParam(filtro.filtro, opcoes.valor)"><a>{{opcoes.descricao}}</a></li>
+	          </ul>
+	        </li>
+        </ng-template>
+       </ul>
+       
+      <form class="navbar-form navbar-left">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Pesquisar" name="shotPesquisa" [ngModel]="shotPesquisa" (ngModelChange)="shotPesquisa=$event; pesquisaShot()">
+          <div *ngIf="htmlPesquisa != ''" [innerHTML]="htmlPesquisa"></div>
+        </div>
+      </form>
+      
+      <ul class="nav navbar-nav navbar-right">
+        <li (click)="alteraTamanho(1)" [routerLink]="['']"><a><i class="fa fa-th fa-2x"></i></a></li>
+        <li (click)="alteraTamanho(2)" [routerLink]="['']"><a><i class="fa fa-th-large fa-2x"></i></a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
 <router-outlet></router-outlet>
