@@ -43,8 +43,11 @@ export class ShowShotsComponent implements OnInit {
   
   getDescription(shot){
       let description = "";
+      
+      let tamanho = (this.params.getTamanho() == 'teaser') ? 200 : 600;
+      
       if(shot.description)
-          description = (shot.description.length > 600) ? shot.description.substring(0, 600)+'(...)' : shot.description;
+          description = (shot.description.length > tamanho) ? shot.description.substring(0, tamanho)+'(...)' : shot.description;
       return description;
   }
   

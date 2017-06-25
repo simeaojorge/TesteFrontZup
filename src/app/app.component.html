@@ -24,12 +24,13 @@
         </ng-template>
        </ul>
        
-      <form class="navbar-form navbar-left">
+       
+      <!-- <form class="navbar-form navbar-left">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Pesquisar" name="shotPesquisa" [ngModel]="shotPesquisa" (ngModelChange)="shotPesquisa=$event; pesquisaShot()">
           <div *ngIf="htmlPesquisa != ''" [innerHTML]="htmlPesquisa"></div>
         </div>
-      </form>
+      </form> -->
       
       <ul class="nav navbar-nav navbar-right">
         <li (click)="alteraTamanho(1)" [routerLink]="['']"><a><i class="fa fa-th fa-2x"></i></a></li>
